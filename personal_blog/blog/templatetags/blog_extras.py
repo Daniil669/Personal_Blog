@@ -28,7 +28,7 @@ def author_details(author, current_user):
             name
         )
 
-    return format_html(name)
+    return format_html("{}", name)
 
 
 @register.simple_tag
