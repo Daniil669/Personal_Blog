@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-from django.utils.timezone import now
+from django.contrib.auth.models import User
 
 
 class Comment(models.Model):
@@ -33,5 +33,20 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag, related_name="posts")
     comments = GenericRelation(Comment)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['title']),
+            models.Index(fields=['content']),
+        ]
+
     def __str__(self):
         return self.title
+    
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    bio = models.TextField()
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
